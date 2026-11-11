@@ -1,28 +1,20 @@
 /**
- * ARCHIVO: SistemaGestion.java
- * PROPÓSITO: Aplicación para la gestión académica y control de notas de estudiantes.
- * AUTOR: Carlos Quezada
- * FECHA: Octubre 2026
- * DESCRIPCIÓN: Clase con múltiples métodos de cálculo, formateo de datos
- *              y un menú interactivo por consola en el método principal.
+ * ARCHIVO: Estudiante.java
+ * CLASE BASE (Superclase)
+ * DESCRIPCIÓN: Define los atributos, constructores y métodos comunes (como cálculo 
+ * de promedios, asistencias y reportes) que heredarán todas las clases derivadas.
  */
-
-
-
-// Clase que representa la entidad del Estudiante
-class Estudiante {
-    // Atributos de la clase
-    public String matricula;     // Código de identificación único
-    public String nombre;        // Nombre completo del alumno
-    public String carrera;       // Programa de estudios actual
-    public double nota1;         // Calificación del primer parcial
-    public double nota2;         // Calificación del segundo parcial
-    public double nota3;         // Calificación del tercer parcial
-    public int asistencias;      // Contador inicial de clases asistidas
-    public final int totalClases = 20; // Total de clases programadas en el periodo (Constante)
+public class Estudiante {
+    // ATRIBUTOS BASE: Compartidos por cualquier tipo de estudiante mediante herencia
+    protected String matricula;     // Identificador único
+    protected String nombre;        // Nombre completo
+    protected String carrera;       // Carrera cursada
+    protected double nota1, nota2, nota3; // Calificaciones parciales
+    protected int asistencias;      // Conteo de clases asistidas
+    public final int totalClases = 20; // Constante del periodo
 
     /**
-     * Constructor para inicializar los atributos del estudiante.
+     * Constructor de la clase base para inicializar los datos generales.
      */
     public Estudiante(String matricula, String nombre, String carrera, double nota1, double nota2, double nota3) {
         this.matricula = matricula;
@@ -31,11 +23,11 @@ class Estudiante {
         this.nota1 = nota1;
         this.nota2 = nota2;
         this.nota3 = nota3;
-        this.asistencias = 0; // Inicia en cero por defecto
+        this.asistencias = 0; // Inicializa por defecto
     }
 
     /**
-     * Suma asistencias validando que no superen el límite del periodo académico.
+     * Método heredable para registrar asistencias con validación de límite.
      */
     public void registrarAsistencia(int cantidad) {
         if (cantidad > 0 && (this.asistencias + cantidad) <= this.totalClases) {
@@ -47,15 +39,16 @@ class Estudiante {
     }
 
     /**
-     * Calcula el promedio aritmético simple de los tres parciales.
+     * Método base para calcular el promedio aritmético. 
+     * Puede ser sobrescrito (@Override) en las clases derivadas si tienen reglas distintas.
      */
     public double calcularPromedio() {
         double promedio = (this.nota1 + this.nota2 + this.nota3) / 3.0;
-        return Math.round(promedio * 100.0) / 100.0; // Redondeo a 2 decimales
+        return Math.round(promedio * 100.0) / 100.0;
     }
 
     /**
-     * Calcula el porcentaje de asistencia del alumno.
+     * Calcula el porcentaje de asistencia en base a las clases totales.
      */
     public double calcularPorcentajeAsistencia() {
         double porcentaje = ((double) this.asistencias / this.totalClases) * 100.0;
@@ -63,7 +56,7 @@ class Estudiante {
     }
 
     /**
-     * Determina la condición final evaluando notas y asistencias de forma estricta.
+     * Determina el estado académico base considerando notas y asistencias.
      */
     public String determinarEstadoAcademico() {
         double promedioFinal = this.calcularPromedio();
@@ -79,7 +72,7 @@ class Estudiante {
     }
 
     /**
-     * Imprime en pantalla una boleta de calificaciones organizada de forma visual.
+     * Despliega la boleta base en consola.
      */
     public void mostrarReporteDetallado() {
         double promedio = this.calcularPromedio();
@@ -99,6 +92,5 @@ class Estudiante {
         System.out.println("Promedio Final: " + promedio + " / 100");
         System.out.println("Asistencia:     " + this.asistencias + "/" + this.totalClases + " (" + porcentajeAsist + "%)");
         System.out.println("Condición:      [" + estado + "]");
-        System.out.println("=============================================\n");
     }
 }
